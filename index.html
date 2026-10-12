@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CCNA 200-301 Drill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: study-desk tool. Main question pane + right rail (progress map, filters). Console-cable blue accent, terminal-style exhibits. */
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --sunken:#e8ecf0; --line:#d3dae1;
+  --fg:#16202a; --muted:#5a6876; --accent:#0a6e9a; --accent-ink:#ffffff; --accent-soft:#dcedf5;
+  --ok:#1d7a46; --ok-soft:#dff3e7; --bad:#b4321f; --bad-soft:#fae3de; --warn:#9a6a00;
+  --term-bg:#0f1b24; --term-fg:#d6e4ee; --term-dim:#7d93a3;
+  --f-display:"Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0d151c; --surface:#15212b; --sunken:#1b2935; --line:#2a3b49;
+  --fg:#e3ebf1; --muted:#93a5b4; --accent:#4cb3e0; --accent-ink:#06202d; --accent-soft:#163445;
+  --ok:#56c98a; --ok-soft:#14321f; --bad:#f07a66; --bad-soft:#3a1c17; --warn:#e3b33f;
+  --term-bg:#081016; --term-fg:#d6e4ee; --term-dim:#6f8697; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0d151c; --surface:#15212b; --sunken:#1b2935; --line:#2a3b49;
+  --fg:#e3ebf1; --muted:#93a5b4; --accent:#4cb3e0; --accent-ink:#06202d; --accent-soft:#163445;
+  --ok:#56c98a; --ok-soft:#14321f; --bad:#f07a66; --bad-soft:#3a1c17; --warn:#e3b33f;
+  --term-bg:#081016; --term-fg:#d6e4ee; --term-dim:#6f8697; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:0 48px}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto}
+
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;padding-block:22px 18px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.brand{display:flex;flex-direction:column;gap:2px}
+.brand .code{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase}
+.brand h1{font-family:var(--f-display);font-weight:800;font-size:clamp(24px,4vw,32px);line-height:1.1;margin:0;letter-spacing:-.01em}
+.modes{display:flex;gap:4px;background:var(--sunken);padding:4px;border-radius:999px}
+.modes button{border:0;background:transparent;padding:7px 16px;border-radius:999px;cursor:pointer;font-family:var(--f-display);font-weight:600;font-size:14px;color:var(--muted)}
+.modes button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;align-items:start}
+@media (max-width:880px){.layout{grid-template-columns:minmax(0,1fr)}}
+
+/* Question pane */
+.qhead{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-bottom:14px}
+.qnum{font-family:var(--f-display);font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+.qnum span{color:var(--muted);font-weight:500}
+.tag{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.04em;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+.tag.multi{background:var(--sunken);color:var(--muted)}
+.qhead .spacer{flex:1}
+.flagbtn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:4px 10px;font-size:13px;cursor:pointer;color:var(--muted)}
+.flagbtn[aria-pressed="true"]{border-color:var(--warn);color:var(--warn)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:clamp(16px,3vw,28px)}
+.exhibit{margin:0 0 20px}
+.exhibit .lbl{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.exhibit pre{margin:0;background:var(--term-bg);color:var(--term-fg);font-family:var(--f-mono);font-size:13px;line-height:1.55;padding:14px 16px;border-radius:8px;overflow-x:auto;white-space:pre}
+.exhibit pre .dim{color:var(--term-dim)}
+.prompt{font-size:18px;line-height:1.55;margin:0 0 18px;text-wrap:pretty}
+.choose{display:inline-block;font-size:13px;color:var(--muted);margin-left:4px}
+
+.opts{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.opt{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:12px;align-items:start;width:100%;text-align:left;padding:11px 14px;border:1.5px solid var(--line);border-radius:9px;background:var(--surface);cursor:pointer;transition:border-color .12s, background .12s}
+.opt:hover{border-color:var(--accent)}
+.opt .key{display:grid;place-items:center;width:28px;height:28px;border-radius:7px;border:1.5px solid var(--line);font-family:var(--f-mono);font-weight:600;font-size:13px;color:var(--muted)}
+.opt.multi .key{border-radius:6px}
+.opt:not(.multi) .key{border-radius:50%}
+.opt .txt{padding-top:3px;white-space:pre-line;min-width:0}
+.opt .mark{font-family:var(--f-mono);font-size:12px;padding-top:6px;white-space:nowrap}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.sel .key{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.opt[disabled]{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.right .key{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.opt.right .mark{color:var(--ok)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.wrong .key{background:var(--bad);border-color:var(--bad);color:var(--surface)}
+.opt.wrong .mark{color:var(--bad)}
+.opt.missed{border-style:dashed;border-color:var(--ok)}
+.opt.missed .mark{color:var(--ok)}
+
+.verdict{margin-top:18px;border-radius:9px;padding:14px 16px;border:1px solid var(--line);background:var(--sunken)}
+.verdict h3{margin:0 0 4px;font-family:var(--f-display);font-size:16px}
+.verdict.ok h3{color:var(--ok)} .verdict.bad h3{color:var(--bad)}
+.verdict p{margin:0;color:var(--fg);max-width:68ch}
+.verdict .note{margin-top:10px;font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+.verdict .note b{color:var(--warn)}
+
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:20px}
+.btn{border:1.5px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 18px;font-family:var(--f-display);font-weight:600;font-size:14px;cursor:pointer}
+.btn:hover:not([disabled]){border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.actions .grow{flex:1}
+.hint{font-size:12.5px;color:var(--muted);font-family:var(--f-mono)}
+@media (max-width:560px){.hint{display:none}}
+
+/* Rail */
+.rail{display:flex;flex-direction:column;gap:18px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px)}
+@media (max-width:880px){.rail{position:static}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.panel h2{font-family:var(--f-display);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;font-weight:700}
+.score{display:flex;align-items:baseline;gap:10px;font-variant-numeric:tabular-nums}
+.score .big{font-family:var(--f-display);font-weight:800;font-size:34px;line-height:1}
+.score .sub{color:var(--muted);font-size:14px}
+.bar{height:8px;border-radius:999px;background:var(--sunken);overflow:hidden;display:flex;margin-top:12px}
+.bar i{display:block;height:100%}
+.bar .b-ok{background:var(--ok)} .bar .b-bad{background:var(--bad)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:12.5px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:0;background:var(--c)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(34px,1fr));gap:5px}
+.cell{aspect-ratio:1;max-width:100%;border:1px solid var(--line);border-radius:6px;background:var(--surface);font-family:var(--f-mono);font-size:11.5px;cursor:pointer;display:grid;place-items:center;font-variant-numeric:tabular-nums;position:relative;color:var(--muted)}
+.cell.ans{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.cell.ok{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.cell.bad{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.cell.cur{outline:2px solid var(--fg);outline-offset:1px;color:var(--fg);font-weight:600}
+.cell.flag::after{content:"";position:absolute;top:2px;right:2px;width:5px;height:5px;border-radius:50%;background:var(--warn)}
+
+.filters{display:flex;flex-direction:column;gap:10px}
+.filters label{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+select{font:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--fg);width:100%}
+.check{flex-direction:row!important;align-items:center;gap:8px!important;color:var(--fg)!important;cursor:pointer}
+.check input{accent-color:var(--accent);width:16px;height:16px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.linkbtn{background:none;border:0;padding:0;color:var(--accent);cursor:pointer;font-size:13px;text-decoration:underline;text-underline-offset:2px}
+.confirm{font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+/* Results */
+.results h2{font-family:var(--f-display);font-size:26px;margin:0 0 4px}
+.results .pct{font-family:var(--f-display);font-weight:800;font-size:64px;line-height:1;font-variant-numeric:tabular-nums}
+.results .pass{font-family:var(--f-mono);font-size:13px;margin-top:6px}
+.topics{width:100%;border-collapse:collapse;margin-top:22px;font-variant-numeric:tabular-nums}
+.topics th,.topics td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);font-size:14px}
+.topics th{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:400}
+.topics td.n{text-align:right;white-space:nowrap}
+.mini{height:6px;border-radius:999px;background:var(--sunken);overflow:hidden;min-width:60px}
+.mini i{display:block;height:100%;background:var(--accent)}
+.empty{color:var(--muted);text-align:center;padding:40px 10px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <span class="code">Cisco 200-301 · 70 items</span>
+      <h1>CCNA 200-301 Drill</h1>
+    </div>
+    <div class="modes" role="group" aria-label="Mode">
+      <button id="m-study" aria-pressed="true">Study</button>
+      <button id="m-exam" aria-pressed="false">Exam</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <main id="main"></main>
+    <aside class="rail">
+      <section class="panel" id="p-score"></section>
+      <section class="panel">
+        <h2>Question map</h2>
+        <div class="grid" id="grid"></div>
+        <div class="legend">
+          <span style="--c:var(--ok)">Correct</span>
+          <span style="--c:var(--bad)">Wrong</span>
+          <span style="--c:var(--accent)">Answered</span>
+          <span style="--c:var(--warn)">Flagged</span>
+        </div>
+      </section>
+      <section class="panel filters" id="p-filters"></section>
+    </aside>
+  </div>
+</div>
+
+<script>
+const TOPICS = {
+  NF:"Network Fundamentals", NA:"Network Access", IPC:"IP Connectivity",
+  IPS:"IP Services", SEC:"Security Fundamentals", AUTO:"Automation & Programmability"
+};
+
+/* a = indexes of correct options (0 = A) */
+const Q = [
+{t:"IPS",q:"Which per-hop traffic-control feature does an ISP implement to mitigate the potential negative effect of a customer exceeding its committed bandwidth?",
+ o:["Marking","Policing","Queuing","Shaping"],a:[1],
+ e:"Policing enforces the contracted rate at the provider edge by dropping or re-marking traffic above the CIR. Shaping is the customer-side counterpart: it buffers excess traffic instead of dropping it."},
+{t:"SEC",q:"What are two examples of multifactor authentication?",
+ o:["single sign-on","shared password repository","passwords that expire","unique user knowledge","soft tokens"],a:[3,4],
+ e:"MFA combines different factor types: something you know (unique user knowledge such as a PIN) and something you have (a soft token on a phone). SSO and expiring passwords are still a single factor."},
+{t:"NF",q:"What are two functions of a firewall within an enterprise?",
+ o:["It serves as an endpoint for a site-to-site VPN in standalone mode.","It enables wireless devices to connect to the network.","It provides support as an endpoint for a remote access VPN in multiple context mode.","It enables traffic filtering based on URLs.","It offers Layer 2 services between hosts."],a:[0,3],
+ e:"Firewalls (ASA/NGFW) terminate site-to-site VPNs in single-context (standalone) mode and next-gen firewalls filter by URL category. Wireless access is the AP/WLC's job and L2 services belong to switches."},
+{t:"NF",q:"In which way does a spine-and-leaf architecture allow for scalability in a network when additional access ports are required?",
+ o:["A leaf switch is added with connections to every spine switch.","A leaf switch is added with a single connection to a core spine switch.","A spine switch is added with at least 40 GB uplinks.","A spine switch and a leaf switch are added with redundant connections between them."],a:[0],
+ e:"Endpoints connect to leaves, and every leaf connects to every spine. Need more access ports? Add a leaf and uplink it to all spines, so every path stays the same number of hops."},
+{t:"NF",q:"What is the role of nonoverlapping channels in a wireless environment?",
+ o:["to reduce interference","to increase bandwidth","to stabilize the RF environment","to allow for channel bonding"],a:[0],
+ e:"Adjacent APs placed on nonoverlapping channels (1, 6, 11 in 2.4 GHz) don't interfere with each other, which reduces co-channel and adjacent-channel interference."},
+{t:"AUTO",q:"In what way does a network supervisor reduce maintenance costs while maintaining network integrity on a traditionally managed network?",
+ o:["They employ additional network administrators to proactively manage the network.","They use automation to centralize network-management tasks.","They install an automated network-monitoring system to provide early warning of network issues.","They automate change-management processes that verify issue resolution."],a:[1],
+ e:"Centralizing management tasks through automation removes repetitive per-device work, which lowers operating cost and keeps configurations consistent."},
+{t:"AUTO",q:"What are two benefits of controller-based networking compared to traditional networking?",
+ o:["controller-based increases network bandwidth usage, while traditional lightens the load on the network","controller-based inflates software costs, while traditional decreases individual licensing costs","controller-based provides centralization of key IT functions, while traditional requires distributed management functions","controller-based reduces network configuration complexity, while traditional increases the potential for errors","controller-based allows for fewer network failures, while traditional increases failure rates"],a:[2,3],
+ e:"A controller centralizes management and policy, and it pushes consistent configuration so there is less box-by-box CLI work and fewer human errors."},
+{t:"SEC",q:"What is the definition of backdoor malware?",
+ o:["malicious code that infects a user machine and then uses that machine to send spam","malicious code that is installed onto a computer to allow access by an unauthorized user","malicious program that is used to launch other malicious programs","malicious code with the main purpose of downloading other malicious code"],a:[1],
+ e:"A backdoor bypasses normal authentication so an attacker can get back in later. A spam-sending host is a bot, and a program that fetches more malware is a downloader or dropper."},
+{t:"AUTO",q:"How is AI used to identify issues within network traffic?",
+ o:["It analyzes patterns for anomaly detection.","It exclusively predicts device malfunctions.","It enhances data packet delivery speeds.","It simplifies traffic route mapping."],a:[0],
+ e:"AI/ML learns a baseline of normal traffic and flags deviations from it. That's anomaly detection. Watch for absolute words like \"exclusively\" in distractors."},
+{t:"SEC",q:"Refer to the exhibit. Users will be using a preconfigured secret key and SSID and must have a secured key hashing algorithm configured. The AAA server must not be used for the user authentication method. Which action completes the task?",
+ x:{cap:"WLC 9800 · WLAN › Security › Layer2 (transcribed)",txt:
+`Security Type ............ Personal
+MAC Filtering ............ [ ]
+AutoConfig iPSK .......... [ ] Enable
+
+WPA2+WPA3 Parameters
+  Policy ................. [x] WPA2   [ ] WPA3
+  Encryption Cipher ...... [ ] CCMP128(AES)
+
+Fast Transition
+  Fast Transition ........ Disable
+
+Protected Management Frame
+  PMF .................... Disabled
+
+Authentication Key Management
+  PSK Format ............. ASCII
+  PSK .................... ••••••••
+  PSK .................... [ ] Enable
+  PSK-SHA2 ............... [ ] Enable`},
+ o:["Enable AutoConfig iPSK.","Set CCMP128(AES).","Configure PSK Format HEX with key string.","Configure PSK-SHA2."],a:[3],
+ e:"Pre-shared key with no AAA means PSK. The \"secured key hashing algorithm\" requirement is met by PSK-SHA2, which derives keys with SHA-256 instead of SHA-1."},
+{t:"IPC",q:"Refer to the exhibit. PC Y is communicating with another device at IP address 10.227.150.193. Which router does router Y use to route traffic?",
+ x:{cap:"Topology + routing table",txt:
+`PC Y 10.224.6.3 ── G0/1 10.224.6.1 [Router Y] G0/0 10.224.1.1 ──┬── Router A 10.224.1.2
+                                                               ├── Router B 10.224.1.3
+                                                               ├── Router C 10.224.1.4
+                                                               └── Router D 10.224.1.5
+
+Router-Y#show ip route
+Gateway of last resort is not set
+
+      10.0.0.0/8 is variably subnetted
+S        10.0.0.0/8 [1/0] via 10.224.1.2
+S        10.128.0.0/9 [1/0] via 10.224.1.3
+O        10.224.0.0/11 [110/0] via 10.224.1.5, 5d18h
+O        10.224.0.0/15 [110/0] via 10.224.1.4, 5d18h
+C        10.224.6.0/24 is directly connected, GigabitEthernet0/1
+C        10.224.1.0/24 is directly connected, GigabitEthernet0/0
+O        10.226.0.0/15 [110/0] via 10.224.1.5, 5d18h
+O        10.227.150.160/27 [110/0] via 10.224.1.3, 1w6d`},
+ o:["router D","router A","router C","router B"],a:[0],
+ e:"Longest match wins. 10.227.150.193 is outside 10.227.150.160/27 (.160–.191). The next most specific match is 10.226.0.0/15 (10.226.0.0–10.227.255.255) via 10.224.1.5, which is router D."},
+{t:"SEC",q:"Refer to the exhibit. Which functionalities will this SSID have while being used by wireless clients?",
+ x:{cap:"WLC 9800 · Add WLAN › Security › Layer2 (transcribed)",txt:
+`( ) WPA + WPA2   (•) WPA2 + WPA3   ( ) WPA3   ( ) Static WEP   ( ) None
+MAC Filtering [ ]        Lobby Admin Access [ ]
+
+WPA Parameters                         Fast Transition
+  WPA Policy  [ ]   WPA2 Policy [ ]      Status ............ Enabled
+  GTK Rand.   [ ]   WPA3 Policy [x]      Over the DS ....... [ ]
+  Transition Disable [ ]                 Reassociation Timeout 20
+
+WPA2/WPA3 Encryption                   Auth Key Mgmt
+  AES(CCMP128) [x]  CCMP256 [ ]          SAE [ ]      FT + SAE    [x]
+  GCMP128      [ ]  GCMP256 [ ]          OWE [ ]      FT + 802.1x [ ]
+                                         802.1x-SHA256 [ ]
+Protected Management Frame               Anti Clogging Threshold 1500
+  PMF ......... Required                 Max Retries ........... 5`},
+ o:["decreases network security against offline dictionary attacks and encourages easy access to the network","decreases network security against air sniffing attacks and discourages the use of complex passwords","increases network security against man in the middle attacks and discourages denial of service attacks","increases network security against offline dictionary attacks and discourages time-consuming brute force attacks"],a:[3],
+ e:"WPA3 with SAE (here FT+SAE) replaces the PSK 4-way handshake with a Dragonfly exchange. Captured handshakes can't be cracked offline, and every guess needs a live exchange, so brute force becomes slow."},
+{t:"NF",q:"What is a characteristic of a Layer 2 switch?",
+ o:["uses the data link layer for communications","tracks the number of active TCP connections","provides a single broadcast domain for all connected devices","filters based on a transport layer protocol"],a:[0],
+ e:"A Layer 2 switch forwards frames by MAC address, which is the data link layer. With VLANs it creates multiple broadcast domains, and it doesn't look at TCP or UDP."},
+{t:"SEC",q:"Which type of VPN connection is used when an employee accesses a secure server from a public Wi-Fi?",
+ o:["router-to-router","site-to-site","open","remote"],a:[3],
+ e:"A single user connecting from anywhere (e.g. AnyConnect over public Wi-Fi) uses a remote-access VPN. Site-to-site links whole networks through gateways."},
+{t:"IPC",q:"What is the primary purpose of the first hop redundancy protocols?",
+ o:["to ensure high availability of the network by providing a transparent fail-over at the active gateway","to ensure high availability of the network by providing a backup route on the CEF in case of a gateway failure","to ensure high availability of the network by providing a redundant path via ARP in case of a failure of path failure","to ensure high availability of the network by providing a secondary route on the RIB at the active gateway"],a:[0],
+ e:"HSRP, VRRP and GLBP share a virtual IP/MAC as the hosts' default gateway. If the active router fails, a standby takes over without any change on the hosts."},
+{t:"NA",q:"How does MAC learning function?",
+ o:["sends frames with unknown destinations to a multicast group","enabled by default on all VLANs and interfaces","increases security on the management VLAN","inspects and drops frames from unknown destinations"],a:[1],
+ e:"Switches learn source MACs automatically on every VLAN and interface by default. Unknown-unicast destinations are flooded within the VLAN, not sent to a multicast group or dropped."},
+{t:"SEC",q:"When a WPA2-PSK WLAN is configured in the Wireless LAN Controller, what is the minimum number of characters that is required in ASCII format?",
+ o:["6","12","8","18"],a:[2],
+ e:"A WPA2 passphrase is 8–63 ASCII characters, or exactly 64 hex characters."},
+{t:"AUTO",q:"What are two characteristics of a controller-based network?",
+ o:["It moves the control plane to a central point.","The administrator can make configuration updates from the CLI.","It decentralizes the control plane, which allows each device to make its own forwarding decisions.","It uses northbound and southbound APIs to communicate between architectural layers.","It uses Telnet to report system issues."],a:[0,3],
+ e:"SDN centralizes the control plane in a controller. Northbound APIs (REST) talk to apps and southbound APIs (NETCONF, OpenFlow) talk to devices."},
+{t:"SEC",q:"What are two recommendations for protecting network ports from being exploited when located in an office space outside of an IT closet?",
+ o:["configure ports to a fixed speed","configure static ARP entries","enable the PortFast feature on ports","implement port-based authentication","shut down unused ports"],a:[3,4],
+ e:"For ports in exposed areas, use 802.1X port-based authentication so only authorized devices get on, and shut down unused ports so nobody can plug in. PortFast only speeds up STP convergence."},
+{t:"NF",q:"Which cloud provided service allows an organization to install its own operating system on a virtual machine?",
+ o:["platform-as-a-service","infrastructure-as-a-service","software-as-a-service","network-as-a-service"],a:[1],
+ e:"IaaS gives you the VM itself and you install and manage the OS. With PaaS the provider supplies the OS and runtime, and SaaS is the finished application."},
+{t:"NA",q:"What is a service that is provided by a wireless controller?",
+ o:["It provides Layer 3 routing between wired and wireless devices.","It manages interference in a dense network.","It issues IP addresses to wired devices.","It mitigates threats from the internet."],a:[1],
+ e:"A WLC runs RRM (Radio Resource Management). It adjusts AP channels and transmit power automatically to manage interference, which matters most in dense deployments."},
+{t:"AUTO",q:"How does automation affect network management processes?",
+ o:["It performs configuration updates based on user profiles.","It interoperates with ISE to define and manage patch and update schedules.","It provides a reactive support model.","It improves the efficiency of system lifecycle management."],a:[3],
+ e:"Automation makes provisioning, changes and upgrades consistent and repeatable across the device lifecycle, which improves efficiency. It is proactive, not reactive."},
+{t:"AUTO",q:"What are two advantages of implementing a controller-based architecture instead of a traditional network architecture?",
+ o:["It allows for seamless connectivity to virtual machines.","It provides increased scalability and management options.","It supports complex and high-scale IP addressing schemes.","It increases security against denial-of-service attacks.","It enables configuration task automation."],a:[1,4],
+ e:"The usual advantages of a controller-based architecture are centralized management that scales and automated configuration tasks."},
+{t:"SEC",q:"Which IPsec mode provides encapsulation and encryption of the entire original IP packet on a site-to-site VPN?",
+ o:["IPsec transport mode with AH","IPsec tunnel mode with ESP","IPsec tunnel mode with AH","IPsec transport mode with ESP"],a:[1],
+ e:"Tunnel mode wraps the whole original packet in a new IP header, which is the site-to-site default. Only ESP encrypts, because AH authenticates without encrypting."},
+{t:"SEC",q:"Refer to the exhibit. An engineer is creating a secure preshared key based SSID using WPA2 for a wireless network running on 2.4 GHz and 5 GHz. Which two tasks must the engineer perform to complete the process?",
+ x:{cap:"WLC · WLAN Layer2 security (transcribed)",txt:
+`WPA2 Policy ............. [x]
+WPA3 Policy ............. [ ]
+WPA2/WPA3 Encryption .... AES(CCMP128) [ ]
+                          CCMP256      [ ]
+                          GCMP128      [ ]
+                          GCMP256      [ ]
+MPSK .................... [ ]
+Auth Key Mgmt ........... 802.1x       [ ]
+                          PSK          [ ]
+                          CCKM         [ ]
+                          SAE          [ ]
+                          OWE          [ ]
+                          FT + 802.1x  [ ]
+                          FT + PSK     [ ]`},
+ o:["Select the PSK option for Auth Key Management.","Select the AES (CCMP128) option for WPA2/WPA3 Encryption.","Select the AES option for Auth Key Management.","Select the 802.1X option for Auth Key Management.","Select the WPA Policy option."],a:[0,1],
+ e:"WPA2-Personal needs an encryption cipher (AES/CCMP128) and PSK as the AKM. AES isn't an AKM option, 802.1X is Enterprise mode, and WPA (v1) is legacy."},
+{t:"IPC",q:"Which Cisco proprietary protocol ensures traffic recovers automatically when the active gateway fails?",
+ o:["HSRP","FHRP","VRRP","SLB"],a:[0],
+ e:"HSRP (and GLBP) are Cisco proprietary. VRRP is the open standard (RFC 5798), and FHRP is the generic name for the protocol family."},
+{t:"IPC",q:"Refer to the exhibit. The route for 10.220.100.96/27 has been very unstable. The same route has four backups to routers A, B, C, and D via the respective methods. The routing protocol defaults for router Y have not been changed. When the current route for 10.220.100.96/27 becomes unavailable, which router will router Y use to route traffic to 10.220.100.96/27?",
+ x:{cap:"Topology + routing table",txt:
+`                ┌── OSPF ──────────────────── Router A
+                ├── Static route with AD of 105 ─ Router B
+ [Router Y] ────┼── External EIGRP ──────────── Router C
+                └── iBGP ───────────────────── Router D
+
+Router-Y#show ip route
+Gateway of last resort is not set
+
+      10.0.0.0/8 is variably subnetted
+B        10.220.100.96/27 [20/0] via 10.224.1.3, 1w6d`},
+ o:["router C","router B","router D","router A"],a:[1],
+ e:"The current route is eBGP (AD 20). Compare the backups by AD: static at 105 beats OSPF (110), external EIGRP (170) and iBGP (200), so router B wins."},
+{t:"IPC",q:"Refer to the exhibit. A network engineer started to configure two directly-connected routers as shown. Which command sequence must the engineer configure on R2 so that the two routers become OSPF neighbors?",
+ x:{cap:"Configuration",txt:
+`R1
+interface GigabitEthernet0/1
+ ip address 192.168.12.1 255.255.255.128
+ no shutdown
+router ospf 1
+ network 192.168.12.1 0.0.0.0 area 1
+
+R2
+interface GigabitEthernet0/1
+ ip address 192.168.12.2 255.255.255.128
+ no shutdown`},
+ o:["router ospf 1\nnetwork 192.168.12.0 0.0.0.127 area 0","interface GigabitEthernet0/1\nip ospf 1 area 1","router ospf 1\nnetwork 192.168.12.1 0.0.0.0 area 1","interface GigabitEthernet0/1\nip ospf 1 area 0"],a:[1],
+ e:"Neighbors must agree on the area, and R1 has the link in area 1. Option B puts R2's G0/1 in area 1 at the interface level. Option C uses R1's IP (.1), so it wouldn't match R2's .2 address."},
+{t:"SEC",q:"Which security program element helps protect against employees unintentionally leaking sensitive information via email?",
+ o:["physical access controls","controlled internet access","workstation screen recordings","user awareness campaigns"],a:[3],
+ e:"Unintentional leaks are a human-behavior problem, and security awareness training is the program element that addresses them."},
+{t:"IPC",q:"Refer to the exhibit. A TCP connection has been initiated and sourced from 10.54.21.20 to a server with a destination address of 172.20.21.43. To which interface will the traffic be forwarded?",
+ x:{cap:"show ip route",txt:
+`#show ip route
+Gateway of last resort is not set
+      172.20.21.21/32 is subnetted, 1 subnets
+D EX     172.20.21.21 [170/423240] via 81.21.24.76, 00:01:32, Ethernet1/0/0
+      192.168.26.87/32 is subnetted, 1 subnets
+D        192.168.26.87 [90/252812] via 42.23.94.72, 00:2:12, Ethernet2/1/1
+      192.168.21.0/24 is subnetted, 1 subnets
+D        192.168.21.0 [90/252321] via 42.23.94.72, 00:2:12, Ethernet1/0/0
+      172.16.87.1 is subnetted, 1 subnets
+C        172.16.87.1 is directly connected, Loopback0
+      172.20.81.81 is subnetted, 1 subnets
+D EX     172.20.81.81 [170/258560] via 64.32.12.34, 00:04:28, Ethernet2/0/0
+      172.20.20.0 is subnetted, 1 subnets
+D EX     172.20.20.0/23 [170/254323] via 75.83.53.34, 00:02:28, Ethernet2/1/0
+      10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        10.54.21.0/24 is directly connected, Ethernet1/0/1
+L        10.54.21.4/32 is directly connected, Ethernet1/0/1`},
+ o:["Ethernet2/1/1","Ethernet2/1/0","Ethernet2/0/0","Ethernet1/0/0"],a:[1],
+ e:"172.20.20.0/23 covers 172.20.20.0–172.20.21.255, so .21.43 matches it. The /32 for 172.20.21.21 is a different host. The traffic exits Ethernet2/1/0."},
+{t:"NF",q:"Refer to the exhibit. Inter-VLAN routing is configured on SW1. Client A is running Linux as an OS in VLAN 10 with a default gateway IP 10.0.0.1 but cannot ping client B in VLAN 20 running Windows. What action must be taken to verify that client A has the correct IP settings?",
+ x:{cap:"Topology",txt:
+`              ( WWW )
+                 │ Gig0/1
+              [ R1 ]
+                 │ Gig0/0
+                 │ Gig0/0
+              [ SW1 ]  (L3 switch)
+     SVI 10 – 10.0.0.1/15     SVI 20 – 10.2.0.1/15
+        │                          │
+   VLAN 10 10.0.0.0/15        VLAN 20 10.2.0.0/15`},
+ o:["Run the ifconfig command on client A to confirm that the subnet mask is set to 255.255.128.0.","Run the ifconfig command on client A to confirm that its IP and subnet mask fall within 255.254.0.0.","Run the ipconfig command on client A and ensure that the IP address is within the host range of 10.0.0.1-10.0.255.254.","Run the ipconfig command on client A to confirm that the correct 10.0.0.1 default gateway is used."],a:[1],
+ e:"Client A runs Linux, so the command is ifconfig (ipconfig is Windows). A /15 prefix is 255.254.0.0, and that is the mask to verify."},
+{t:"IPC",q:"Refer to the exhibit. Of the routes learned with dynamic routing protocols, which has the least preferred metric?",
+ x:{cap:"R4 · show ip route",txt:
+`R4#show ip route
+Gateway of last resort is not set
+
+      10.0.0.0/8 is variably subnetted, 14 subnets, 2 masks
+O        10.0.12.0/24 [110/2] via 10.0.24.2, 00:02:27, GigabitEthernet0/1
+D        10.0.13.0/24 [90/3072] via 10.0.34.3, 00:00:19, GigabitEthernet0/0
+C        10.0.24.0/24 is directly connected, GigabitEthernet0/1
+L        10.0.24.4/32 is directly connected, GigabitEthernet0/1
+C        10.0.34.0/24 is directly connected, GigabitEthernet0/0
+L        10.0.34.4/32 is directly connected, GigabitEthernet0/0
+C        10.0.45.0/24 is directly connected, GigabitEthernet0/2
+L        10.0.45.4/32 is directly connected, GigabitEthernet0/2
+R        10.0.56.0/24 [120/1] via 10.0.45.5, 00:00:08, GigabitEthernet0/2
+O        10.255.1.1/32 [110/3] via 10.0.34.3, 00:02:27, GigabitEthernet0/0
+                       [110/3] via 10.0.24.2, 00:02:27, GigabitEthernet0/1
+D        10.255.2.2/32 [90/130816] via 10.0.24.2, 00:14:46, GigabitEthernet0/1
+O        10.255.3.3/32 [110/2] via 10.0.34.3, 00:02:27, GigabitEthernet0/0
+C        10.255.4.4/32 is directly connected, Loopback0
+R        10.255.5.5/32 [120/1] via 10.0.45.5, 00:00:08, GigabitEthernet0/2`},
+ o:["Local","EIGRP","RIP","OSPF"],a:[2],
+ e:"The question really means administrative distance (the first number in the brackets). Of the dynamic protocols shown, EIGRP is 90, OSPF 110 and RIP 120, so RIP is the least preferred. Local isn't a routing protocol."},
+{t:"IPC",q:"Refer to the exhibit. The static routes were implemented on the border router. What is the next hop IP address for a ping sent to 172.16.153.154 from the border router?",
+ x:{cap:"Border router config",txt:
+`ip route 172.0.0.0 255.0.0.0 10.65.65.65
+ip route 172.16.0.0 255.255.0.0 10.56.65.56
+ip route 122.16.153.0 255.255.255.0 10.65.65.56
+ip route 172.16.153.153 255.255.255.255 10.65.65.65
+ip route 0.0.0.0 0.0.0.0 10.56.56.56`},
+ o:["10.65.56.65","10.65.65.56","10.56.65.56","10.65.65.65"],a:[2],
+ e:"As the exhibit is shown, the longest match for 172.16.153.154 is 172.16.0.0/16, so the next hop is 10.56.65.56. The /32 is a different host (.153) and the third line is 122.x, not 172.x.",
+ n:"Your screenshot's answer key says B (10.65.65.56). That's only correct if the third route is 172.16.153.0/24, which is probably the real exam's wording and a typo in this dump. If you see this on the exam, read the third line carefully."},
+{t:"SEC",q:"What is a characteristic of encryption in wireless networks?",
+ o:["uses a unidirectional handshake for authentication","intercepts data threats before they attack a network","uses integrity checks to identify forgery attacks","prevents intercepted data from being easily read"],a:[3],
+ e:"Encryption provides confidentiality. Someone can sniff the frames but can't read them. Integrity checks (MIC) are a separate function."},
+{t:"NA",q:"How does MAC learning function?",
+ o:["restricts ports to a maximum of 10 dynamically-learned addresses","associates the MAC address with the port on which it is received","increases security on the management VLAN","drops received MAC addresses not listed in the address table"],a:[1],
+ e:"The switch records each frame's source MAC against its ingress port (and VLAN) in the CAM table. MAC limits are port security, a separate feature."},
+{t:"AUTO",q:"Which role does AI play in monitoring network data flow?",
+ o:["It simplifies traffic route mapping.","It analyzes patterns for anomaly detection.","It enhances data packet delivery speeds.","It exclusively predicts device malfunctions."],a:[1],
+ e:"Same idea as the other AI questions: AI baselines traffic patterns and flags anomalies."},
+{t:"AUTO",q:"How does network automation help reduce network downtime?",
+ o:["By using automation platforms with intent-based configuration, all changes are checked for possible outages before being implemented.","Changes can be implemented in parallel across multiple devices at once, which increases the speed of the change rate.","Configuration templates and testing can be built into implementation, which increases the success rate of a network change.","Emails can be generated based on when a network admin performs a network change, which increases visibility."],a:[2],
+ e:"Templates plus built-in validation mean fewer human errors, so more changes succeed and less downtime is self-inflicted. Pushing faster or in parallel doesn't by itself reduce outages."},
+{t:"NA",q:"Which AP mode wirelessly connects two separate network segments each set up within a different campus building?",
+ o:["bridge","mesh","local","point-to-point"],a:[0],
+ e:"Bridge mode APs form wireless links between buildings (point-to-point or point-to-multipoint bridging). \"Point-to-point\" is a topology, not an AP mode."},
+{t:"SEC",q:"Which security element uses a combination of one-time passwords, a login name, and a personal smartphone?",
+ o:["rule-based access control","software-defined segmentation","multifactor authentication","attribute-based access control"],a:[2],
+ e:"Here the login name and password are something you know, and the smartphone generating OTPs is something you have. Combining factor types is MFA."},
+{t:"IPC",q:"Refer to the exhibit. Which route does R1 select for traffic that is destined to 192.168.16.2?",
+ x:{cap:"R1 · show ip route",txt:
+`R1# show ip route
+D       192.168.16.0/26 [90/2679326] via 192.168.1.1
+R       192.168.16.0/24 [120/3] via 192.168.1.2
+O       192.168.16.0/21 [110/2] via 192.168.1.3
+i L1    192.168.16.0/27 [115/30] via 192.168.1.4`},
+ o:["192.168.16.0/27","192.168.16.0/24","192.168.16.0/21","192.168.16.0/26"],a:[0],
+ e:"All four routes contain 192.168.16.2, and the router picks the longest prefix (/27) whatever the AD or metric. AD only breaks ties between identical prefixes."},
+{t:"IPC",q:"Refer to the exhibit. What is the subnet mask of the route to the 10.10.13.160 prefix?",
+ x:{cap:"Topology + Router1 · show ip route",txt:
+`Internet .2 ─ 10.10.11.0/30 ─ .1 [Router1] .1 ─ 10.10.10.0/28 ─ .2 [Switch1] ── Host A 10.10.13.214
+MPLS     .2 ─ 10.10.12.0/30 ─ .1 ┘
+
+Router1#show ip route
+Gateway of last resort is 10.10.11.2 to network 0.0.0.0
+
+      209.165.200.0/27 is subnetted, 1 subnets
+B        209.165.200.224 [20/0] via 10.10.12.2, 03:22:14
+      209.165.201.0/27 is subnetted, 1 subnets
+B        209.165.201.0 [20/0] via 10.10.12.2, 02:26:33
+      209.165.202.0/27 is subnetted, 1 subnets
+B        209.165.202.128 [20/0] via 10.10.12.2, 02:26:03
+      10.0.0.0/8 is variably subnetted, 8 subnets, 4 masks
+C        10.10.10.0/28 is directly connected, GigabitEthernet0/0
+C        10.10.11.0/30 is directly connected, FastEthernet2/0
+C        10.10.12.0/30 is directly connected, GigabitEthernet0/1
+O        10.10.13.0/25 [110/2] via 10.10.10.1, 00:00:04, GigabitEthernet0/0
+O        10.10.13.128/28 [110/2] via 10.10.10.1, 00:00:04, GigabitEthernet0/0
+O        10.10.13.144/28 [110/2] via 10.10.10.1, 00:00:04, GigabitEthernet0/0
+O        10.10.13.160/29 [110/2] via 10.10.10.1, 00:00:04, GigabitEthernet0/0
+O        10.10.13.208/29 [110/2] via 10.10.10.1, 00:00:04, GigabitEthernet0/0
+S*    0.0.0.0/0 [1/0] via 10.10.11.2`},
+ o:["255.255.255.240","255.255.248.0","255.255.255.128","255.255.255.248"],a:[3],
+ e:"The table lists 10.10.13.160/29, and /29 = 255.255.255.248 (8 addresses, 6 usable)."},
+{t:"NF",q:"Which cable type must be used when connecting a router and switch together using these:\n1. Pins 1 and 2 are receivers and pins 3 and 6 are transmitters\n2. Auto detection MDI-X is unavailable.",
+ o:["crossover","console","straight-through","rollover"],a:[2],
+ e:"A router (MDI) and a switch (MDI-X) are unlike devices, and unlike devices use a straight-through cable. Crossover is for like devices (switch–switch, router–router, PC–router) when auto-MDIX is off."},
+{t:"AUTO",q:"Which protocol does Ansible use to push modules to nodes in a network?",
+ o:["Telnet","Kerberos","SSH","SNMP"],a:[2],
+ e:"Ansible is agentless and push-based. It connects over SSH (and NETCONF/HTTPS API for some network modules). Puppet and Chef use agents."},
+{t:"AUTO",q:"Which function generally performed by a traditional network device is replaced by a software-defined controller?",
+ o:["encryption and decryption for VPN link processing","encapsulation and decapsulation of packets in a data-link frame","changing the source or destination address during NAT operations","building route tables and updating the forwarding table"],a:[3],
+ e:"Building route tables and updating the forwarding table is control-plane work, and that's what the SDN controller takes over. Encapsulation, NAT and encryption are data-plane work and stay on the device."},
+{t:"IPC",q:"Refer to the exhibit. A packet is being sent across router R1 to host 172.16.0.14. What is the destination route for the packet?",
+ x:{cap:"R1 · show ip route | begin gateway",txt:
+`R1# show ip route | begin gateway
+Gateway of last resort is 209.165.200.246 to network 0.0.0.0
+S*    0.0.0.0/0 [1/0] via 209.165.200.246, Serial0/1/0
+                is directly connected, Serial0/1/0
+      172.16.0.0/16 is variably subnetted, 2 subnets, 2 masks
+S        172.16.3.0/24 [1/0] via 209.165.200.250, Serial0/0/0
+O        172.16.3.0/28 [110/1] via 209.165.200.254, 00:00:28, Serial0/0/1
+      209.165.200.0/24 is variably subnetted, 6 subnets, 2 masks
+C        209.165.200.244/30 is directly connected, Serial0/1/0
+L        209.165.200.245/32 is directly connected, Serial0/1/0
+C        209.165.200.248/30 is directly connected, Serial0/0/0
+L        209.165.200.249/32 is directly connected, Serial0/0/0
+C        209.165.200.252/30 is directly connected, Serial0/0/1
+L        209.165.200.253/32 is directly connected, Serial0/0/1`},
+ o:["209.165.200.254 via Serial0/0/1","209.165.200.250 via Serial0/0/0","209.165.200.246 via Serial0/1/0","209.165.200.254 via Serial0/0/0"],a:[2],
+ e:"172.16.0.14 isn't in 172.16.3.0/24 or 172.16.3.0/28, so nothing specific matches and the packet takes the default route via 209.165.200.246 out Serial0/1/0."},
+{t:"SEC",q:"How are VLAN hopping attacks mitigated?",
+ o:["configure extended VLANs","manually implement trunk ports and disable DTP","activate all ports and place in the default VLAN","enable dynamic ARP inspection"],a:[1],
+ e:"Switch-spoofing VLAN hopping abuses DTP. Hard-code trunks (switchport mode trunk + switchport nonegotiate), set access ports to access mode, and avoid VLAN 1 as the native VLAN."},
+{t:"NF",q:"Refer to the exhibit. What does the host do when using the IPv4 Preferred function?",
+ x:{cap:"Windows · ipconfig /all",txt:
+`Connection-specific DNS Suffix  . :
+Description . . . . . . . . . . . : Intel(R) Ethernet Connection (2) I218-V
+Physical Address. . . . . . . . . : D0-50-99-47-A9-7F
+DHCP Enabled. . . . . . . . . . . : Yes
+Autoconfiguration Enabled . . . . : Yes
+Link-local IPv6 Address . . . . . : fe80::8809:9772:c583:6b18%15(Preferred)
+IPv4 Address. . . . . . . . . . . : 192.168.69.132(Preferred)
+Subnet Mask . . . . . . . . . . . : 255.255.255.0
+Lease Obtained. . . . . . . . . . : Thursday, January 21, 2021 11:10:46 PM
+Lease Expires . . . . . . . . . . : Wednesday, February 3, 2021 11:27:29 AM
+Default Gateway . . . . . . . . . : 192.168.69.1
+DHCP Server . . . . . . . . . . . : 192.168.69.1
+DHCPv6 IAID . . . . . . . . . . . : 231755929
+DHCPv6 Client DUID. . . . . . . . : 00-01-00-01-26-D7-BB-3F-D0-50-99-47-A9-7F
+DNS Servers . . . . . . . . . . . : 192.168.69.1
+NetBIOS over Tcpip. . . . . . . . : Enabled`},
+ o:["It forces the DNS server to provide the same IPv4 address at each renewal.","It continues to use a statically assigned IPv4 address.","It requests the same IP address when it renews its lease.","It prefers a pool of addresses when renewing the IPv4 host IP address."],a:[2],
+ e:"\"(Preferred)\" means the address is valid and in use. On lease renewal the DHCP client asks for that same address again. DNS doesn't hand out IPs, and DHCP Enabled = Yes means the address isn't static."},
+{t:"NF",q:"What are two behaviors of a point-to-point WAN topology?",
+ o:["It leverages a dedicated connection.","It uses a single router to route traffic between sites.","It connects remote networks through a single line.","It delivers redundancy between the central office and branch offices.","It provides direct connections between each router in the topology."],a:[0,2],
+ e:"A point-to-point WAN is one dedicated (leased) line connecting two sites. Redundancy and any-to-any links describe full-mesh or hub-and-spoke designs."},
+{t:"IPC",q:"Refer to the exhibit. Which interface does a packet take to reach the destination address of 10.10.10.14?",
+ x:{cap:"R3 · show ip route",txt:
+`R3#show ip route
+Gateway of last resort is not set
+
+      10.0.0.0/8 is variably subnetted, 8 subnets, 4 masks
+C        10.10.10.16/28 is directly connected, FastEthernet 0/0
+L        10.10.10.17/32 is directly connected, FastEthernet 0/0
+C        10.10.10.8/29 is directly connected, FastEthernet 0/1
+L        10.10.10.9/32 is directly connected, FastEthernet 0/1
+C        10.10.10.4/30 is directly connected, FastEthernet 0/2
+L        10.10.10.5/32 is directly connected, FastEthernet 0/2
+C        10.10.10.0/30 is directly connected, Serial 0/0
+L        10.10.10.1/32 is directly connected, Serial 0/0`},
+ o:["FastEthernet 0/1","FastEthernet 0/2","FastEthernet 0/0","Serial 0/0"],a:[0],
+ e:"10.10.10.8/29 spans .8–.15, so .14 falls in it and leaves FastEthernet 0/1. The /30 on Fa0/2 is only .4–.7, and the /28 on Fa0/0 starts at .16."},
+{t:"AUTO",q:"What is the main difference between traditional networks and controller-based networking?",
+ o:["Controller-based networks provide a framework for innovation, and traditional networks create efficiency.","Controller-based networks increase TCO for the company, and traditional networks require less investment.","Controller-based networks are open for application requests, and traditional networks operate manually.","Controller-based networks are a closed ecosystem, and traditional networks take advantage of programmability."],a:[2],
+ e:"Controllers expose northbound APIs that applications can call. Traditional networks are configured by hand, box by box."},
+{t:"AUTO",q:"Which technology is appropriate for communication between an SDN controller and applications running over the network?",
+ o:["NETCONF","REST API","OpenFlow","Southbound API"],a:[1],
+ e:"Apps talk to the controller through the northbound interface, which is normally a REST API. NETCONF and OpenFlow are southbound (controller to devices)."},
+{t:"SEC",q:"How does encryption protect the wireless network?",
+ o:["via a policy to prevent unauthorized users from communicating on the wireless network","via integrity checks to identify wireless forgery attacks in the frame","via specific ciphers to detect and prevent zero-day network attacks","via an algorithm to change wireless data so that only the access point and client understand it"],a:[3],
+ e:"Encryption transforms the data with a cipher and key so only the client and AP, which hold the keys, can read it."},
+{t:"IPS",q:"What is the purpose of the logging facility?",
+ o:["It defines the severity of the syslog event.","It represents the source that generated the syslog event.","It represents the timestamp of the syslog event.","It contains the text message that describes the syslog event."],a:[1],
+ e:"In %FACILITY-SEVERITY-MNEMONIC: description, the facility identifies the source (e.g. LINEPROTO, OSPF, SYS) and the severity is a level from 0 to 7."},
+{t:"NA",q:"Which type of wired port is required when an AP offers one unique SSID, passes client data and management traffic, and is in autonomous mode?",
+ o:["LAG","access","trunk","default"],a:[2],
+ e:"An autonomous AP carries a management VLAN and the SSID's client VLAN, which are separate VLANs. Two VLANs on one switchport means an 802.1Q trunk."},
+{t:"IPC",q:"Refer to the exhibit. The route for 10.227.150.160/27 has been very unstable. The same route has four backups to routers A, B, C, and D via the respective methods. The routing protocol defaults for router Y have not been changed. When the current route for 10.227.150.160/27 becomes unavailable, which router will router Y use to route traffic to 10.227.150.160/27?",
+ x:{cap:"Topology + routing table",txt:
+`                ┌── OSPF ──────────────────── Router A
+                ├── Static route with AD of 105 ─ Router B
+ [Router Y] ────┼── External EIGRP ──────────── Router C
+                └── iBGP ───────────────────── Router D
+
+Router-Y#show ip route
+Gateway of last resort is not set
+
+      10.0.0.0/8 is variably subnetted
+B        10.227.150.160/27 [20/0] via 10.224.1.3, 1w6d`},
+ o:["router B","router D","router C","router A"],a:[0],
+ e:"Same logic as the earlier version: the current route is eBGP (AD 20). Next lowest AD is the static at 105, ahead of OSPF 110, external EIGRP 170 and iBGP 200, so router B."},
+{t:"IPC",q:"Refer to the exhibit. What is the correct next hop for router R1 to reach IP addresses 192.168.2.86 and 10.20.1.50?",
+ x:{cap:"R1 · show ip route static + topology",txt:
+`R1#show ip route static
+      10.0.0.0/8 is variably subnetted, 3 subnets, 3 masks
+S        10.20.1.0/26 [1/0] via 172.16.1.4
+S        10.20.1.0/24 [1/0] via 172.16.1.2
+S        10.20.1.32/27 [1/0] via 172.16.1.3
+      192.168.2.0/24 is variably subnetted, 3 subnets, 3 masks
+S        192.168.2.0/24 [1/0] via 172.16.1.4
+S        192.168.2.64/27 [1/0] via 172.16.1.2
+S        192.168.2.80/29 [1/0] via 172.16.1.3
+
+                                .4 [R2]─SW2─( 10.20.1.0/26   192.168.2.0/24 )
+[R1] Gi0/0 ── SW1 172.16.1.0/29 ─ .3 [R3]─SW3─( 10.20.1.0/24   192.168.2.64/27 )
+                                .2 [R4]─SW4─( 10.20.1.32/27  192.168.2.80/29 )`},
+ o:["172.16.1.3","172.16.1.2","172.16.1.4","172.16.1.1"],a:[0],
+ e:"192.168.2.86 is in 192.168.2.80/29 (.80–.87). 10.20.1.50 is in 10.20.1.0/26 (.0–.63) but more specifically in 10.20.1.32/27 (.32–.63). Both longest matches point to 172.16.1.3."},
+{t:"SEC",q:"Refer to the exhibit. Which configuration is needed to configure a WLAN with WPA2 only and with a password that is 63 characters long?",
+ x:{cap:"AireOS WLC · WLANs › Edit 'my_WLAN' › Security › Layer 2 (transcribed)",txt:
+`Protected Management Frame
+  PMF ................. Disabled
+WPA+WPA2 Parameters
+  WPA Policy .......... [x]
+  WPA Encryption ...... [x] AES  [ ] TKIP
+  WPA2 Policy ......... [x]
+  WPA2 Encryption ..... [x] AES  [ ] TKIP  [ ] CCMP256  [ ] GCMP128  [ ] GCMP256
+  OSEN Policy ......... [ ]
+Authentication Key Management
+  802.1X .............. [ ] Enable
+  CCKM ................ [ ] Enable
+  PSK ................. [ ] Enable
+  FT 802.1X ........... [ ] Enable
+  FT PSK .............. [ ] Enable
+  SUITEB-1X ........... [ ] Enable
+  SUITEB192-1X ........ [ ] Enable`},
+ o:["Enable PSK and FT PSK and then disable WPA Policy.","Disable WPA Encryption and then enable FT PSK.","Disable WPA Policy and WPA Encryption and then enable PSK using ASCII","Enable PSK using Hex format and then disable WPA Policy."],a:[2],
+ e:"\"WPA2 only\" means turning off WPA (v1) policy and its encryption. A 63-character password means ASCII format (8–63), because hex keys must be exactly 64 characters."},
+{t:"IPC",q:"Refer to the exhibit. What is the next hop for a packet destined for 10.1.1.1?",
+ x:{cap:"show ip route",txt:
+`Router#show ip route
+....
+S*    0.0.0.0/0 [1/0] via 172.17.0.2
+      10.0.0.0/8 is variably subnetted, 558 subnets, 10 masks
+O E2     10.2.0.0/16 [110/1] via 10.2.24.1, 7w0d, Vlan82
+O        10.2.17.0/24 [110/6] via 10.2.24.1, 6w4d, Vlan82
+O        10.2.23.0/24 [110/6] via 10.2.24.1, 7w0d, Vlan82
+C        10.2.24.0/24 is directly connected, Vlan82
+L        10.2.24.2/32 is directly connected, Vlan82
+O        10.2.25.0/24 [110/6] via 10.3.25.1, 6w1d, Vlan72
+                      [110/6] via 10.2.24.1, 6w1d, Vlan82
+O        10.3.17.0/24 [110/6] via 10.3.25.1, 7w0d, Vlan72
+O        10.3.24.0/24 [110/6] via 10.3.25.1, 7w0d, Vlan72
+C        10.3.25.0/24 is directly connected, Vlan72
+L        10.3.25.2/32 is directly connected, Vlan72`},
+ o:["10.3.25.1","Vlan82","172.17.0.2","Vlan72"],a:[2],
+ e:"Nothing listed covers 10.1.x.x (10.2.0.0/16 is 10.2 only), so the default route applies and the next hop is 172.17.0.2. Vlan82 and Vlan72 are interfaces, not next hops."},
+{t:"AUTO",q:"How does AI contribute to network traffic analysis?",
+ o:["It simplifies traffic route mapping.","It eliminates network threats","It enhances data packet delivery speeds.","It analyzes patterns for anomaly detection."],a:[3],
+ e:"AI analyzes patterns to detect anomalies. It doesn't \"eliminate\" threats, so be wary of absolute claims."},
+{t:"AUTO",q:"Which benefit does automation provide in network management?",
+ o:["It reduces the complexity of network management systems.","It decreases CPU and memory load on networking devices.","It increases the performance of networking devices.","It reduces network failures due to human error."],a:[3],
+ e:"The main win from automation is consistency. Fewer manual CLI changes means fewer outages caused by typos and misconfigurations."},
+{t:"AUTO",q:"How do predictive AI models enhance network resource allocation?",
+ o:["They anticipate future traffic spikes.","They select correct cabling types for deployment.","They solely monitor historical traffic volumes.","They assign IP addresses to devices."],a:[0],
+ e:"Predictive models use historical trends to forecast demand, such as traffic spikes, so capacity can be allocated in advance. \"Solely monitor\" describes plain monitoring, not prediction."},
+{t:"NF",q:"What is the difference between the TCP and UDP protocols?",
+ o:["TCP has an inherent order for packet assembly, and UDP reassembles packets in a specific order.","TCP has a 20-byte minimal header size, and UDP has an 8-byte header size.","TCP uses only a checksum, and UDP has an acknowledgment mechanism.","TCP requires five packets to set up a connection, and UDP requires only three packets."],a:[1],
+ e:"The TCP header is at least 20 bytes and the UDP header is a fixed 8. UDP has no ordering, ACKs or handshake, and TCP's handshake is 3 packets."},
+{t:"IPS",q:"What is the purpose of classifying network traffic in QoS?",
+ o:["configures traffic-matching rules on network devices","writes the class identifier of a packet to a dedicated field in the packet header","services traffic according to its class","identifies the type of traffic that will receive a particular treatment"],a:[3],
+ e:"Classification identifies what the traffic is so the right QoS treatment can be applied. Writing a value into the header (DSCP/CoS) is marking, and servicing traffic by class is queuing/scheduling."},
+{t:"AUTO",q:"Which advantage does machine learning offer for network security?",
+ o:["It manages firewall rule sets.","It improves real-time threat detection.","It controls VPN access permissions.","It enforces password complexity requirements."],a:[1],
+ e:"ML spots unusual behavior as it happens, which improves real-time threat detection. The other options are ordinary policy-enforcement tasks."},
+{t:"NA",q:"Which AP mode provides a wireless connection between two network segments?",
+ o:["root","FlexConnect","local","bridge"],a:[3],
+ e:"Bridge mode links separate wired segments over wireless. FlexConnect is for branch APs that switch traffic locally, and local is the default mode tunneled to the WLC."},
+{t:"IPC",q:"What is the primary purpose of a First Hop Redundancy Protocol?",
+ o:["It allows a router to use bridge priorities to create multiple loop-free paths to a single destination.","It allows directly connected neighbors to share configuration information.","It reduces routing failures by allowing Layer 3 load balancing between OSPF neighbors that have the same link metric.","It reduces routing failures by allowing more than one router to represent itself as the default gateway of a network."],a:[3],
+ e:"With an FHRP, several routers share one virtual default-gateway IP, so hosts keep forwarding if one router fails. Bridge priorities belong to STP."},
+{t:"AUTO",q:"Which two features are provided by Ansible in network automation?",
+ o:["launching job templates using version control","manual playbook runs","supplying network credentials","role-based access control","agentless deployment"],a:[1,4],
+ e:"Ansible (the CLI engine) is agentless and runs playbooks on demand. Job templates, credential management and RBAC are Ansible Tower/AWX features."},
+{t:"IPC",q:"Refer to the exhibit. OSPF neighbors routers A, B, C, and D are sending a route for 10.227.150.160/27. When the current route for 10.227.150.160/27 becomes unavailable, which cost will router Y use to route traffic to 10.227.150.160/27?",
+ x:{cap:"OSPF Area 0 + routing table",txt:
+`                 Area 0
+            ┌── Cost 20 ── Router A
+ [Router Y] ├── Cost 40 ── Router B
+            ├── Cost 50 ── Router C
+            └── Cost 30 ── Router D
+
+Router Y#show ip route
+Gateway of last resort is not set
+
+      10.0.0.0/8 is variably subnetted
+O        10.227.150.160/27 [110/10] via 10.224.1.3, 1w6d`},
+ o:["cost 30","cost 20","cost 40","cost 50"],a:[1],
+ e:"All the backups are OSPF (same AD), so the lowest cost wins and the remaining best path is cost 20 via router A."},
+{t:"SEC",q:"What is a characteristic of encryption in wireless networks?",
+ o:["eliminates network piggybacking","encodes plain text into cipher text","uses ciphers to authenticate","identifies an access point on a WLAN"],a:[1],
+ e:"Encryption turns plaintext into ciphertext. Authentication is a separate step, and the SSID/BSSID identifies an AP."},
+{t:"IPS",q:"Which action prevents debug messages from being sent via syslog while allowing other messages when an abnormally high number of syslog messages are generated by a device with the debug process turned on?",
+ o:["Turn off the logging monitor in global configuration mode.","Set the logging trap severity level to informational.","Use an access list to filter out the syslog messages.","Disable logging to the console."],a:[1],
+ e:"logging trap informational sends levels 0–6 to the syslog server and drops level 7 (debugging). Logging monitor and console only affect terminal and console output, not syslog."}
+];
+
+/* ---------- state ---------- */
+const LS = "ccna-drill-v1";
+const store = (() => { try { const s = JSON.parse(localStorage.getItem(LS)); return s && typeof s==="object" ? s : {}; } catch(e){ return {}; } })();
+const save = () => { try { localStorage.setItem(LS, JSON.stringify(store)); } catch(e){} };
+store.hist ||= {};      // per-question history {c: times correct, w: times wrong, last: 'ok'|'bad'}
+store.flags ||= {};
+store.prefs ||= {shuffleQ:false, shuffleO:false, topic:"all", set:"all", examSize:"all"};
+
+let mode = "study";
+let S = null;  // session
+
+function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function poolFor(prefs){
+  return Q.map((_,i)=>i).filter(i=>{
+    if(prefs.topic!=="all" && Q[i].t!==prefs.topic) return false;
+    const h = store.hist[i];
+    if(prefs.set==="missed") return h && h.last==="bad";
+    if(prefs.set==="new") return !h;
+    if(prefs.set==="flagged") return !!store.flags[i];
+    return true;
+  });
+}
+
+function newSession(){
+  const p = store.prefs;
+  let ids = poolFor(p);
+  if(mode==="exam"){
+    ids = shuffle(ids);
+    if(p.examSize!=="all") ids = ids.slice(0, +p.examSize);
+  } else if(p.shuffleQ) ids = shuffle(ids);
+  const perm = {};
+  ids.forEach(i => { const n = Q[i].o.length; perm[i] = p.shuffleO ? shuffle([...Array(n).keys()]) : [...Array(n).keys()]; });
+  S = {ids, pos:0, sel:{}, checked:{}, perm, finished:false, review:false, start:Date.now()};
+  render();
+}
+
+/* ---------- rendering ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const L = "ABCDEFGH";
+
+function isCorrect(i){
+  const sel = (S.sel[i]||[]).slice().sort().join(",");
+  return sel === Q[i].a.slice().sort().join(",");
+}
+function revealed(i){ return mode==="study" ? !!S.checked[i] : S.finished; }
+
+function render(){
+  $("#m-study").setAttribute("aria-pressed", mode==="study");
+  $("#m-exam").setAttribute("aria-pressed", mode==="exam");
+  renderFilters(); renderGrid(); renderScore();
+  if(mode==="exam" && S.finished && !S.review) return renderResults();
+  if(!S.ids.length) {
+    $("#main").innerHTML = `<div class="card empty"><p>No questions match this filter.</p><button class="btn" id="resetf">Show all questions</button></div>`;
+    $("#resetf").onclick = () => { store.prefs.topic="all"; store.prefs.set="all"; save(); newSession(); };
+    return;
+  }
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const i = S.ids[S.pos], q = Q[i], multi = q.a.length>1, rev = revealed(i);
+  const sel = S.sel[i] || [];
+  const perm = S.perm[i];
+  let opts = perm.map((orig, k) => {
+    let cls = "opt" + (multi?" multi":"");
+    let mark = "";
+    const picked = sel.includes(orig), right = q.a.includes(orig);
+    if(rev){
+      if(right && picked){ cls+=" right"; mark="✓ correct"; }
+      else if(picked){ cls+=" wrong"; mark="✗ your pick"; }
+      else if(right){ cls+=" missed"; mark="✓ answer"; }
+    } else if(picked) cls+=" sel";
+    return `<li><button class="${cls}" data-o="${orig}" ${rev?"disabled":""} aria-pressed="${picked}">
+      <span class="key">${L[k]}</span><span class="txt">${esc(q.o[orig])}</span><span class="mark">${mark}</span></button></li>`;
+  }).join("");
+
+  let verdict = "";
+  if(rev){
+    const ok = isCorrect(i);
+    const letters = perm.map((o,k)=>q.a.includes(o)?L[k]:null).filter(Boolean).join(", ");
+    verdict = `<div class="verdict ${ok?"ok":"bad"}"><h3>${ok?"Correct":(sel.length?"Not quite":"Not answered")} · Answer: ${letters}</h3><p>${esc(q.e)}</p>${q.n?`<p class="note"><b>Answer-key note.</b> ${esc(q.n)}</p>`:""}</div>`;
+  }
+
+  const last = S.pos === S.ids.length-1;
+  let primary;
+  if(mode==="study"){
+    primary = rev
+      ? `<button class="btn primary" id="next" ${last?"disabled":""}>Next question</button>`
+      : `<button class="btn primary" id="check" ${sel.length? "":"disabled"}>Check answer</button>`;
+  } else if(S.finished){
+    primary = `<button class="btn primary" id="toResults">Back to results</button>`;
+  } else {
+    primary = last
+      ? `<button class="btn primary" id="finish">Finish exam</button>`
+      : `<button class="btn primary" id="next">Next</button>`;
+  }
+
+  $("#main").innerHTML = `
+    <div class="qhead">
+      <span class="qnum">Question ${S.pos+1} <span>of ${S.ids.length}</span></span>
+      <span class="tag">${TOPICS[q.t]}</span>
+      ${multi?`<span class="tag multi">Choose ${q.a.length}</span>`:""}
+      <span class="spacer"></span>
+      <button class="flagbtn" id="flag" aria-pressed="${!!store.flags[i]}">${store.flags[i]?"⚑ Flagged":"⚐ Flag"}</button>
+    </div>
+    <article class="card">
+      ${q.x?`<figure class="exhibit"><div class="lbl"><span>Exhibit</span><span>${esc(q.x.cap)}</span></div><pre>${esc(q.x.txt)}</pre></figure>`:""}
+      <p class="prompt">${esc(q.q).replace(/\n/g,"<br>")}${multi?` <span class="choose">(Choose ${q.a.length === 2 ? "two" : q.a.length})</span>`:""}</p>
+      <ul class="opts">${opts}</ul>
+      ${verdict}
+      <div class="actions">
+        <button class="btn" id="prev" ${S.pos===0?"disabled":""}>Previous</button>
+        ${primary}
+        <span class="grow"></span>
+        <span class="hint">A–E select · Enter ${mode==="study"?"check":"next"} · ←/→ move</span>
+      </div>
+    </article>`;
+
+  document.querySelectorAll(".opt").forEach(b => b.onclick = () => pick(+b.dataset.o));
+  $("#prev").onclick = () => go(-1);
+  $("#next") && ($("#next").onclick = () => go(1));
+  $("#check") && ($("#check").onclick = check);
+  $("#finish") && ($("#finish").onclick = finishPrompt);
+  $("#toResults") && ($("#toResults").onclick = () => { S.review=false; render(); });
+  $("#flag").onclick = () => { store.flags[i] ? delete store.flags[i] : store.flags[i]=1; save(); render(); };
+}
+
+function pick(orig){
+  const i = S.ids[S.pos]; if(revealed(i)) return;
+  const q = Q[i]; let sel = S.sel[i] || [];
+  if(q.a.length>1){
+    sel = sel.includes(orig) ? sel.filter(x=>x!==orig) : (sel.length < q.a.length ? [...sel, orig] : [...sel.slice(1), orig]);
+  } else sel = [orig];
+  S.sel[i] = sel; render();
+}
+function record(i){
+  const h = store.hist[i] || {c:0,w:0};
+  if(isCorrect(i)){ h.c++; h.last="ok"; } else { h.w++; h.last="bad"; }
+  store.hist[i] = h;
+}
+function check(){
+  const i = S.ids[S.pos]; if(!(S.sel[i]||[]).length || S.checked[i]) return;
+  S.checked[i] = true; record(i); save(); render();
+}
+function go(d){ const n = S.pos + d; if(n<0 || n>=S.ids.length) return; S.pos = n; render(); window.scrollTo({top:0, behavior:"smooth"}); }
+
+let confirming = false;
+function finishPrompt(){
+  const unanswered = S.ids.filter(i => !(S.sel[i]||[]).length).length;
+  if(unanswered && !confirming){
+    confirming = true;
+    const a = $(".actions");
+    const div = document.createElement("div");
+    div.className = "confirm";
+    div.innerHTML = `<span>${unanswered} unanswered. Finish anyway?</span><button class="btn primary" id="yes">Finish</button><button class="btn" id="no">Keep going</button>`;
+    a.after(div);
+    $("#yes").onclick = () => { confirming=false; finish(); };
+    $("#no").onclick = () => { confirming=false; div.remove(); };
+    return;
+  }
+  finish();
+}
+function finish(){
+  S.finished = true; S.end = Date.now();
+  S.ids.forEach(record); save(); render();
+}
+
+function renderResults(){
+  const n = S.ids.length, ok = S.ids.filter(isCorrect).length, pct = Math.round(ok/n*100);
+  const secs = Math.round((S.end - S.start)/1000), mm = Math.floor(secs/60), ss = String(secs%60).padStart(2,"0");
+  const by = {};
+  S.ids.forEach(i => { const t=Q[i].t; by[t] ||= {n:0,ok:0}; by[t].n++; if(isCorrect(i)) by[t].ok++; });
+  const rows = Object.keys(TOPICS).filter(t=>by[t]).map(t => {
+    const r = by[t], p = Math.round(r.ok/r.n*100);
+    return `<tr><td>${TOPICS[t]}</td><td><div class="mini"><i style="width:${p}%"></i></div></td><td class="n">${r.ok}/${r.n}</td></tr>`;
+  }).join("");
+  const firstWrong = S.ids.findIndex(i=>!isCorrect(i));
+  $("#main").innerHTML = `<article class="card results">
+    <h2>Exam complete</h2>
+    <div class="pct" style="color:${pct>=82?"var(--ok)":"var(--bad)"}">${pct}%</div>
+    <div class="pass">${ok} of ${n} correct · ${mm}:${ss} elapsed · ${pct>=82?"above":"below"} the ~82% (825/1000) pass mark</div>
+    <table class="topics"><thead><tr><th>Exam domain</th><th></th><th class="n">Score</th></tr></thead><tbody>${rows}</tbody></table>
+    <div class="actions">
+      <button class="btn primary" id="rev" ${firstWrong<0?"disabled":""}>Review mistakes</button>
+      <button class="btn" id="revall">Review all</button>
+      <button class="btn" id="again">New exam</button>
+    </div></article>`;
+  $("#rev").onclick = () => { S.review=true; S.pos=firstWrong; render(); };
+  $("#revall").onclick = () => { S.review=true; S.pos=0; render(); };
+  $("#again").onclick = newSession;
+}
+
+function renderGrid(){
+  const g = $("#grid");
+  g.innerHTML = S.ids.map((i,k) => {
+    let c = "cell";
+    if(revealed(i)) c += isCorrect(i) ? " ok" : ((S.sel[i]||[]).length || S.finished ? " bad" : "");
+    else if((S.sel[i]||[]).length) c += " ans";
+    if(k===S.pos && !(mode==="exam" && S.finished && !S.review)) c += " cur";
+    if(store.flags[i]) c += " flag";
+    return `<button class="${c}" data-k="${k}" aria-label="Question ${k+1}">${k+1}</button>`;
+  }).join("");
+  g.querySelectorAll(".cell").forEach(b => b.onclick = () => { if(mode==="exam"&&S.finished) S.review=true; S.pos=+b.dataset.k; render(); });
+}
+
+function renderScore(){
+  const p = $("#p-score");
+  if(mode==="study"){
+    const done = S.ids.filter(i=>S.checked[i]), ok = done.filter(isCorrect).length, bad = done.length-ok;
+    const pct = done.length ? Math.round(ok/done.length*100) : 0;
+    const all = Object.keys(store.hist).length;
+    const missed = Object.values(store.hist).filter(h=>h.last==="bad").length;
+    p.innerHTML = `<h2>This session</h2>
+      <div class="score"><span class="big">${done.length?pct+"%":"–"}</span><span class="sub">${ok} right · ${bad} wrong · ${S.ids.length-done.length} left</span></div>
+      <div class="bar"><i class="b-ok" style="width:${ok/S.ids.length*100}%"></i><i class="b-bad" style="width:${bad/S.ids.length*100}%"></i></div>
+      <div class="legend"><span style="--c:var(--muted)">All time: ${all}/${Q.length} seen, ${missed} to redo</span></div>`;
+  } else {
+    const answered = S.ids.filter(i=>(S.sel[i]||[]).length).length;
+    p.innerHTML = `<h2>Exam</h2>
+      <div class="score"><span class="big">${answered}<span class="sub">/${S.ids.length}</span></span><span class="sub">${S.finished?"finished":"answered · no feedback until you finish"}</span></div>
+      <div class="bar"><i class="b-ok" style="width:${answered/S.ids.length*100}%;background:var(--accent)"></i></div>
+      ${S.finished?"":`<div class="actions" style="margin-top:12px"><button class="btn" id="finish2">Finish exam</button></div>`}`;
+    $("#finish2") && ($("#finish2").onclick = () => { S.pos = S.ids.length-1; render(); finishPrompt(); });
+  }
+}
+
+function renderFilters(){
+  const p = store.prefs;
+  const topicOpts = `<option value="all">All domains</option>` + Object.entries(TOPICS).map(([k,v]) => {
+    const n = Q.filter(q=>q.t===k).length; return `<option value="${k}" ${p.topic===k?"selected":""}>${v} (${n})</option>`; }).join("");
+  const cnt = s => poolFor({...p, set:s}).length;
+  $("#p-filters").innerHTML = `<h2>${mode==="study"?"Study set":"Exam setup"}</h2>
+    <label>Domain<select id="f-topic">${topicOpts}</select></label>
+    <label>Questions<select id="f-set">
+      <option value="all" ${p.set==="all"?"selected":""}>All (${cnt("all")})</option>
+      <option value="missed" ${p.set==="missed"?"selected":""}>Last answered wrong (${cnt("missed")})</option>
+      <option value="new" ${p.set==="new"?"selected":""}>Never answered (${cnt("new")})</option>
+      <option value="flagged" ${p.set==="flagged"?"selected":""}>Flagged (${cnt("flagged")})</option>
+    </select></label>
+    ${mode==="exam"?`<label>Exam length<select id="f-size">
+      ${["10","20","40","all"].map(v=>`<option value="${v}" ${p.examSize===v?"selected":""}>${v==="all"?"Every matching question":v+" questions"}</option>`).join("")}
+    </select></label>`:`<label class="check"><input type="checkbox" id="f-sq" ${p.shuffleQ?"checked":""}> Shuffle question order</label>`}
+    <label class="check"><input type="checkbox" id="f-so" ${p.shuffleO?"checked":""}> Shuffle answer options</label>
+    <div class="row"><button class="btn" id="restart">${mode==="exam"?"Start new exam":"Restart session"}</button></div>
+    <div class="row" id="resetrow"><button class="linkbtn" id="wipe">Clear all progress</button></div>`;
+  const upd = (k,v) => { p[k]=v; save(); newSession(); };
+  $("#f-topic").onchange = e => upd("topic", e.target.value);
+  $("#f-set").onchange = e => upd("set", e.target.value);
+  $("#f-size") && ($("#f-size").onchange = e => upd("examSize", e.target.value));
+  $("#f-sq") && ($("#f-sq").onchange = e => upd("shuffleQ", e.target.checked));
+  $("#f-so").onchange = e => upd("shuffleO", e.target.checked);
+  $("#restart").onclick = newSession;
+  $("#wipe").onclick = () => {
+    $("#resetrow").innerHTML = `<span class="confirm">Erase history and flags? <button class="linkbtn" id="wy">Erase</button> <button class="linkbtn" id="wn">Cancel</button></span>`;
+    $("#wy").onclick = () => { store.hist={}; store.flags={}; save(); newSession(); };
+    $("#wn").onclick = renderFilters;
+  };
+}
+
+$("#m-study").onclick = () => { if(mode!=="study"){ mode="study"; newSession(); } };
+$("#m-exam").onclick = () => { if(mode!=="exam"){ mode="exam"; newSession(); } };
+
+document.addEventListener("keydown", e => {
+  if(e.target.closest("select,input") || e.metaKey || e.ctrlKey || e.altKey) return;
+  if(!S || !S.ids.length || (mode==="exam" && S.finished && !S.review)) return;
+  const k = e.key.toUpperCase();
+  const i = S.ids[S.pos];
+  const idx = "ABCDE".indexOf(k) >= 0 ? "ABCDE".indexOf(k) : "12345".indexOf(k);
+  if(idx >= 0 && idx < Q[i].o.length && k.length===1){ pick(S.perm[i][idx]); return; }
+  if(e.key==="ArrowRight") go(1);
+  else if(e.key==="ArrowLeft") go(-1);
+  else if(e.key==="Enter"){
+    if(e.target.tagName==="BUTTON") return;
+    if(mode==="study"){ revealed(i) ? go(1) : check(); }
+    else if(!S.finished){ S.pos===S.ids.length-1 ? finishPrompt() : go(1); }
+  }
+});
+
+newSession();
+</script>
+
+</body>
+</html>
